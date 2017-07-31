@@ -1,0 +1,35 @@
+---
+- hosts: 192.168.3.2
+  gather_facts: true
+  connection: local
+
+
+  tasks:
+   - name: configure login banner
+     
+     ios_banner:
+       banner: login
+       host: "{{ ansible_host }}"
+       username: samya
+       password: pass
+       text: |
+          ***************************************************************************
+
+                 ||        ||
+                 ||        ||             Welcome to Devoteam GmbH 
+                ||||      ||||            Weiterstadt, Germany
+            ..:||||||:..:||||||:..        17.07.2017-Samya Ghosh
+                                          we are using Cisco c3745 Router
+
+                     NOTICE TO USERS of NSO Showcase project
+
+          UNAUTHORIZED ACCESS TO THIS NETWORK DEVICE IS PROHIBITED.
+          You must have explicit permission to access or configure this
+          device.  All activities performed on this device are logged and
+          violations of this policy may result in disciplinary action.
+
+          ***************************************************************************
+    
+ 
+   
+   
