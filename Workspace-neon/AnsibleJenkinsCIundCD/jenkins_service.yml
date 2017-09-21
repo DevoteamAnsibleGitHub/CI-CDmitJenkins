@@ -1,0 +1,48 @@
+---
+  - name: Start Jenkins Service Job  
+    hosts: 127.0.0.1
+    connection: local
+
+
+    #vars:
+         #- jenkins.cli_dest = '/home/samya/Ansible-Jenkins/jenkins-cli.jar'  
+
+
+
+    tasks:
+
+          - name: install add-apt-repostory
+            become: true
+            apt: name=software-properties-common state=latest  
+
+          - name: add webupd8team repositories
+            become: true
+            apt_repository: repo="ppa:openjdk/ppa" state=present
+    
+
+          - name: install required software for Jenkins job Start
+            become: true
+            apt: name={{item}} state=latest update_cache=true cache_valid_time=3600
+            with_items:
+            - openjdk-8-jdk
+            - git
+            - git-core
+            - default-jre      
+            - default-jdk
+            - maven 
+
+          - name: Clone git repo
+            git: repo=https://github.com/ghoshatlht/S2SVPNUpdate.git dest=/home/samya/s2smitjenkins
+
+          #- name:  
+
+          - name: Get jenkins client jar file
+            action: shell wget localhost:8080/jnlpJars/jenkins-cli.jar
+
+            args:
+              creates: /home/samya/Ansible-Jenkins/jenkins-cli.jar
+
+          - name: create job for jenkins
+            sudo: yes
+            action: shell java -jar /home/samya/Ansible-Jenkins/jenkins-cli.jar -s http://localhost:8080/ create-job JOB_test2 --username samya --password admin  < /home/samya/Ansible-Jenkins/job_config.xml
+            
